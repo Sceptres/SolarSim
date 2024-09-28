@@ -11,3 +11,7 @@ void Camera::Apply(ShaderProgram& shaderProgram) {
     shaderProgram.setMat4("view", this->view);
     shaderProgram.setMat4("projection", this->projection);
 }
+
+glm::vec3 Camera::getPosition() {
+    return this->position;
+}

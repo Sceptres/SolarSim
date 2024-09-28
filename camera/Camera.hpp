@@ -12,6 +12,7 @@ class Camera {
     public:
         Camera(const glm::vec3 startPos, GLfloat fov, GLfloat aspectRatio, GLfloat nearPlaneDistance, GLfloat farPlaneDistance);
         void Apply(ShaderProgram& shaderProgram);
+        glm::vec3 getPosition();
 
     private:
         glm::vec3 position;
