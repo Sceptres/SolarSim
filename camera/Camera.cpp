@@ -5,7 +5,6 @@ Camera::Camera(const glm::vec3 startPos, GLfloat fov, GLfloat aspectRatio, GLflo
     this->target = glm::vec3(0);
     this->up = glm::vec3(0);
     this->UpdateStates(this->position, this->target);
-    this->view = glm::lookAt(this->position, this->target, this->up);
     this->projection = glm::perspective(fov, aspectRatio, nearPlaneDistance, farPlaneDistance);
 }
 
@@ -38,6 +37,8 @@ void Camera::UpdateStates(glm::vec3 pos, glm::vec3 target) {
     this->up.x = cameraUp.x;
     this->up.y = cameraUp.y;
     this->up.z = cameraUp.z;
+
+    this->view = glm::lookAt(this->position, this->target, this->up);
 }
 
 glm::vec3 Camera::getPosition() {
