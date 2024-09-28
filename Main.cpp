@@ -148,7 +148,7 @@ int main() {
 	while(!glfwWindowShouldClose(window)) {
 		handleInput(window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.3, 0.4, 0.5, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderProgram.Activate();
