@@ -56,16 +56,44 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 }
 
 GLfloat verts[] = {
-    // Positions          // Colors (R, G, B)
-    -1.0f, -1.0f, -1.0f,  0.2f, 0.3f, 0.8f,  // Vertex 0
-     1.0f, -1.0f, -1.0f,  0.2f, 0.3f, 0.8f,  // Vertex 1
-     1.0f,  1.0f, -1.0f,  0.9f, 0.2f, 0.5f,  // Vertex 2
-    -1.0f,  1.0f, -1.0f,  0.9f, 0.2f, 0.5f,  // Vertex 3
-    -1.0f, -1.0f,  1.0f,  0.6f, 0.1f, 0.9f,  // Vertex 4
-     1.0f, -1.0f,  1.0f,  0.6f, 0.1f, 0.9f,  // Vertex 5
-     1.0f,  1.0f,  1.0f,  0.3f, 0.6f, 0.7f,  // Vertex 6
-    -1.0f,  1.0f,  1.0f,  0.3f, 0.6f, 0.7f   // Vertex 7
+    // Positions            // Colors (R, G, B)
+    // Back face (green)
+    -1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 0
+     1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 1
+     1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 2
+    -1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 3
+
+    // Front face (red)
+    -1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 4
+     1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 5
+     1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 6
+    -1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 7
+
+    // Left face (blue)
+    -1.0f, -1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 8
+    -1.0f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 9
+    -1.0f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 10
+    -1.0f,  1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 11
+
+    // Right face (aqua)
+     1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 12
+     1.0f, -1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 13
+     1.0f,  1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 14
+     1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 15
+
+    // Bottom face (fuchsia)
+    -1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 16
+     1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 17
+     1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 18
+    -1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 19
+
+    // Top face (yello)
+    -1.0f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 20
+     1.0f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 21
+     1.0f,  1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 22
+    -1.0f,  1.0f,  1.0f,   1.0f, 1.0f, 0.0f   // Vertex 23
 };
+
 
 GLuint indices[] = {
     // Back face
@@ -77,21 +105,22 @@ GLuint indices[] = {
     6, 7, 4,
 
     // Left face
-    4, 0, 3,
-    3, 7, 4,
+    8, 9, 10,
+    10, 11, 8,
 
     // Right face
-    1, 5, 6,
-    6, 2, 1,
+    12, 13, 14,
+    14, 15, 12,
 
     // Bottom face
-    4, 5, 1,
-    1, 0, 4,
+    16, 17, 18,
+    18, 19, 16,
 
     // Top face
-    3, 2, 6,
-    6, 7, 3
-}; 
+    20, 21, 22,
+    22, 23, 20
+};
+
 
 int main() {
 	glfwInit();
