@@ -101,7 +101,8 @@ int main() {
 
     Cube cube(glm::vec3(0, 0, 0));
 
-	Camera camera(glm::vec3(0.0f, 0.0f, -10.0f), 45.0f, (float)width/(float)height, 0.1f, 100.0f);
+	Camera camera(glm::vec3(-6, 5, 4), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
+    camera.LookAt(cube.getPosition());
 
 	while(!glfwWindowShouldClose(window)) {
 		handleInput(window);
