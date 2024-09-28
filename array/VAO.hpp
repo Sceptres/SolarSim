@@ -3,19 +3,20 @@
 #define VAO_CLASS
 
 #include <glad/glad.h>
-#include "../buffer/VBO.h"
+#include "../buffer/Buffer.hpp"
 
 class VAO {
     public:
         VAO();
+        GLuint getId();
+        void LinkBuffers(GLuint layout, GLuint stride, void* offset);
         void Bind();
         void Unbind();
         void Delete();
-        void LinkVBO(VBO vbo);
-        GLuint getId();
 
     private:
         GLuint id;
+
 };
 
 #endif
