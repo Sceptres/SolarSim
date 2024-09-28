@@ -26,17 +26,17 @@ GLfloat Cube::verts[] = {
     1.0f,  1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 14
     1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 15
 
-    // Bottom face (fuchsia)
+    // Bottom face (yellow)
     -1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 16
     1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 17
     1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 18
     -1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 19
 
-    // Top face (yello)
-    -1.0f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 20
-    1.0f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 21
-    1.0f,  1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 22
-    -1.0f,  1.0f,  1.0f,   1.0f, 1.0f, 0.0f   // Vertex 23
+    // Top face (futchsia)
+    -1.0f,  1.0f, -1.0f,   1.0f, 0.0f, 1.0f,  // Vertex 20
+    1.0f,  1.0f, -1.0f,   1.0f, 0.0f, 1.0f,  // Vertex 21
+    1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 1.0f,  // Vertex 22
+    -1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 1.0f   // Vertex 23
 };
 
 GLuint Cube::indices[] = {
