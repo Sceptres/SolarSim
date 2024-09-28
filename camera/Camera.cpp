@@ -1,10 +1,10 @@
 #include "Camera.hpp"
 
-Camera::Camera(const glm::vec3 startPos, GLfloat fovRad, GLfloat aspectRatio, GLfloat nearPlaneDistance, GLfloat farPlaneDistance) {
+Camera::Camera(const glm::vec3 startPos, GLfloat fov, GLfloat aspectRatio, GLfloat nearPlaneDistance, GLfloat farPlaneDistance) {
     this->position = glm::vec3(startPos.x, startPos.y, startPos.z);
     this->view = glm::mat4(1.0f);
     this->view = glm::translate(this->view, this->position);
-    this->projection = glm::perspective(glm::radians(fovRad), aspectRatio, nearPlaneDistance, farPlaneDistance);
+    this->projection = glm::perspective(fov, aspectRatio, nearPlaneDistance, farPlaneDistance);
 }
 
 void Camera::Apply(ShaderProgram& shaderProgram) {
