@@ -11,38 +11,31 @@
 #include "shader/ShaderProgram.hpp"
 #include "camera/Camera.hpp"
 #include "entity/cube/Cube.hpp"
+#include "input/InputHandler.hpp"
 
 static bool isInDebugMode = false;
 bool bKeyPressed = false; // To track the state of the "B" key
 PPMCapture capturer;
 
-void handleInput(GLFWwindow* window) {
-    // Handle ESC key to close window
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+void closeWindow(GLFWwindow* window) {
+    glfwSetWindowShouldClose(window, true);
+}
 
-    // Handle "B" key toggle
-    if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS) {
-        if (!bKeyPressed) {
-            if (isInDebugMode) {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                isInDebugMode = false;
-            } else {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                isInDebugMode = true;
-            }
-            bKeyPressed = true;
-        }
+void toggleDebugMode(GLFWwindow* window) {
+    if (isInDebugMode) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        isInDebugMode = false;
     } else {
-        bKeyPressed = false; // Reset the state when the key is released
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        isInDebugMode = true;
     }
+}
 
-    if(glfwGetKey(window, GLFW_KEY_P) ==GLFW_PRESS) {
-        std::cout << "Capture Window " << capturer.getId() << std::endl;
-        int buffer_width, buffer_height;
-        glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
-        capturer.Dump("Assignment0-ss", buffer_width, buffer_height);
-    }
+void captureIntoPPM(GLFWwindow* window) {
+    std::cout << "Capture Window " << capturer.getId() << std::endl;
+    int buffer_width, buffer_height;
+    glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
+    capturer.Dump("Assignment0-ss", buffer_width, buffer_height);
 }
 
 void handleDebugShader(ShaderProgram& shaderProgram) {
@@ -85,6 +78,11 @@ int main() {
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glEnable(GL_DEPTH_TEST);
 
+    InputHandler inputHandler(window);
+    inputHandler.AddKeyCallback(GLFW_KEY_ESCAPE, closeWindow);
+    inputHandler.AddKeyCallback(GLFW_KEY_B, toggleDebugMode);
+    inputHandler.AddKeyCallback(GLFW_KEY_P, captureIntoPPM);
+
 	ShaderProgram shaderProgram("shaders/default.vert", "shaders/default.frag");
 
 	VAO vao;
@@ -105,7 +103,7 @@ int main() {
     camera.LookAt(cube.getPosition());
 
 	while(!glfwWindowShouldClose(window)) {
-		handleInput(window);
+		inputHandler.ProcessInput();
 
 		glClearColor(0.3, 0.4, 0.5, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
