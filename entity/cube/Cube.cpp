@@ -100,7 +100,7 @@ void Cube::UpdateShader(ShaderProgram& shaderProgram) {
 }
 
 void Cube::Render() {
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, sizeof(Cube::indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 }
 
 void Cube::setPosition(glm::vec3 newPosition) {
