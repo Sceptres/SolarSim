@@ -7,8 +7,13 @@ out vec3 vecColor;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform bool isDebug;
 
 void main() {
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-    vecColor = vecColorIn;
+    if(!isDebug) {
+        vecColor = vecColorIn;
+    } else {
+        vecColor = vec3(0.0, 0.0, 0.0);
+    }
 }

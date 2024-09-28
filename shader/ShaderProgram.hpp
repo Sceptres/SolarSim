@@ -17,6 +17,7 @@ class ShaderProgram {
         void Activate();
         void Delete();
         void setMat4(const std::string& name, glm::mat4 value);
+        void setBool(const std::string& name, GLboolean value);
 
     private:
         GLuint id;

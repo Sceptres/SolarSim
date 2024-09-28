@@ -46,6 +46,10 @@ void handleInput(GLFWwindow* window) {
     }
 }
 
+void handleDebugShader(ShaderProgram& shaderProgram) {
+    shaderProgram.setBool("isDebug", isInDebugMode);
+}
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -149,6 +153,7 @@ int main() {
 
 		shaderProgram.Activate();
 
+        handleDebugShader(shaderProgram);
 		shaderProgram.setMat4("model", model);
 		camera.Apply(shaderProgram);
 
