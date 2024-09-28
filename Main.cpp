@@ -3,8 +3,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include "ppm/PPMCapture.h"
 #include "buffer/VBO/VBO.hpp"
@@ -12,6 +10,7 @@
 #include "array/VAO.hpp"
 #include "shader/ShaderProgram.hpp"
 #include "camera/Camera.hpp"
+#include "entity/cube/Cube.hpp"
 
 static bool isInDebugMode = false;
 bool bKeyPressed = false; // To track the state of the "B" key
@@ -55,73 +54,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-GLfloat verts[] = {
-    // Positions            // Colors (R, G, B)
-    // Back face (green)
-    -1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 0
-     1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 1
-     1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 2
-    -1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 3
-
-    // Front face (red)
-    -1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 4
-     1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 5
-     1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 6
-    -1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 7
-
-    // Left face (blue)
-    -1.0f, -1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 8
-    -1.0f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 9
-    -1.0f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 10
-    -1.0f,  1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 11
-
-    // Right face (aqua)
-     1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 12
-     1.0f, -1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 13
-     1.0f,  1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 14
-     1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 15
-
-    // Bottom face (fuchsia)
-    -1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 16
-     1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 17
-     1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 18
-    -1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 19
-
-    // Top face (yello)
-    -1.0f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 20
-     1.0f,  1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 21
-     1.0f,  1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 22
-    -1.0f,  1.0f,  1.0f,   1.0f, 1.0f, 0.0f   // Vertex 23
-};
-
-
-GLuint indices[] = {
-    // Back face
-    0, 1, 2,
-    2, 3, 0,
-
-    // Front face
-    4, 5, 6,
-    6, 7, 4,
-
-    // Left face
-    8, 9, 10,
-    10, 11, 8,
-
-    // Right face
-    12, 13, 14,
-    14, 15, 12,
-
-    // Bottom face
-    16, 17, 18,
-    18, 19, 16,
-
-    // Top face
-    20, 21, 22,
-    22, 23, 20
-};
-
-
 int main() {
 	glfwInit();
 
@@ -158,22 +90,18 @@ int main() {
 	VAO vao;
 	vao.Bind();
 
-	VBO vbo(verts, sizeof(verts));
-	EBO ebo(indices, sizeof(indices));
+	VBO vbo = Cube::InstantiateVBO();
+	EBO ebo = Cube::InstantiateEBO();
 
-	GLuint stride = 6 * sizeof(float);
-	vao.LinkBuffers(0, stride, (void*) 0);
-	vao.LinkBuffers(1, stride, (void*) (3 * sizeof(float)));
+    Cube::LinkAttribs(vao);
 
 	vao.Unbind();
 	vbo.Unbind();
 	ebo.Unbind();
 
-	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 1.0f, 0.0f)); 
+    Cube cube(glm::vec3(0, 0, 0));
 
-	Camera camera(glm::vec3(0.0f, 0.0f, -3.0f), 45.0f, (float)width/(float)height, 0.1f, 100.0f);
+	Camera camera(glm::vec3(0.0f, 0.0f, -10.0f), 45.0f, (float)width/(float)height, 0.1f, 100.0f);
 
 	while(!glfwWindowShouldClose(window)) {
 		handleInput(window);
@@ -184,11 +112,11 @@ int main() {
 		shaderProgram.Activate();
 
         handleDebugShader(shaderProgram);
-		shaderProgram.setMat4("model", model);
+		cube.UpdateShader(shaderProgram);
 		camera.Apply(shaderProgram);
 
 		vao.Bind();
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+		cube.Render();
 		glfwSwapBuffers(window);
 		
 		glfwPollEvents();
