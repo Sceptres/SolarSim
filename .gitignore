@@ -2,6 +2,8 @@
 /Main.dSYM
 **/.DS_STORE
 
+*.ppm
+
 # Prerequisites
 *.d
 
