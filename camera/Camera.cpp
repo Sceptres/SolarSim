@@ -30,9 +30,9 @@ void Camera::UpdateStates(glm::vec3 pos, glm::vec3 target) {
     this->target.z = target.z;
     
     glm::vec3 camDirection = glm::normalize(this->position - this->target);
-    glm::vec3 upVec = glm::vec3(0.0f, 1.0f, 0.0f); 
+    glm::vec3 upVec = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 cameraRight = glm::normalize(glm::cross(upVec, camDirection));
-    glm::vec3 cameraUp = glm::cross(camDirection, cameraRight);
+    glm::vec3 cameraUp = glm::normalize(glm::cross(camDirection, cameraRight));
     
     this->up.x = cameraUp.x;
     this->up.y = cameraUp.y;
