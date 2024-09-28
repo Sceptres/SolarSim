@@ -107,5 +107,6 @@ void Cube::setPosition(glm::vec3 newPosition) {
     this->position.x = newPosition.x;
     this->position.y = newPosition.y;
     this->position.z = newPosition.z;
+    this->model = glm::mat4(1.0f);
     this->model = glm::translate(this->model, this->position);
 }
