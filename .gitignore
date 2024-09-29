@@ -1,7 +1,7 @@
 /.vscode
 /Main.dSYM
 **/.DS_STORE
-
+glad.c
 *.ppm
 *.mp4
 
