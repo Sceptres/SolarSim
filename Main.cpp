@@ -54,6 +54,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+	glfwWindowHint(GLFW_SAMPLES, 4);
 	#ifdef __APPLE__
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
@@ -77,6 +78,7 @@ int main() {
 	glViewport(0, 0, width, height);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 
     InputHandler inputHandler(window);
     inputHandler.AddKeyCallback(GLFW_KEY_ESCAPE, closeWindow);
