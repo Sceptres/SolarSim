@@ -91,7 +91,7 @@ int main() {
 	unsigned int width = 1024;
 	unsigned int height = 576;
 
-	GLFWwindow* window = glfwCreateWindow(width, height, "Test Window", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "Solar Simulation", NULL, NULL);
 	if(window == nullptr) {
 		std::cout << "Failed to create a window" << std::endl;
 		glfwTerminate();
@@ -151,10 +151,9 @@ int main() {
 		glm::vec3(0, 0, 0)
 	);
 
-	Camera camera(glm::vec3(60, 30, 80), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
-    camera.LookAt(sun.getPosition());
+	Camera camera(glm::vec3(30, 20, 90), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
 
-	float day = 0;
+	float day = 0, inc = 1.0f/24;
 
 	while(!glfwWindowShouldClose(window)) {
 		inputHandler.ProcessInput();
@@ -165,6 +164,7 @@ int main() {
 		shaderProgram.Activate();
         debug.HandleDebugShader(shaderProgram);
 
+		camera.LookAt(sun.getPosition());
         camera.Apply(shaderProgram);
 
 		std::cout << "Today is: " << day << std::endl;
@@ -186,6 +186,8 @@ int main() {
 		moon.Render();
 
         vao.Unbind();
+
+		day += inc;
 
 		glfwSwapBuffers(window);
 
