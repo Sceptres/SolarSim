@@ -122,7 +122,7 @@ int main() {
 		glm::vec3(0, 0, 0)
 	);
 
-	Camera camera(glm::vec3(0, 0, 120), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
+	Camera camera(glm::vec3(-120, 100, 80), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
     camera.LookAt(sun.getPosition());
 
 	while(!glfwWindowShouldClose(window)) {
