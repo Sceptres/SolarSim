@@ -12,23 +12,13 @@
 #include "camera/Camera.hpp"
 #include "entity/cube/Cube.hpp"
 #include "input/InputHandler.hpp"
+#include "debug/DebugFilter.hpp"
 
-static bool isInDebugMode = false;
-bool bKeyPressed = false; // To track the state of the "B" key
+DebugFilter debug;
 PPMCapture capturer;
 
 void closeWindow(GLFWwindow* window) {
     glfwSetWindowShouldClose(window, true);
-}
-
-void toggleDebugMode(GLFWwindow* window) {
-    if (isInDebugMode) {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        isInDebugMode = false;
-    } else {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        isInDebugMode = true;
-    }
 }
 
 void captureIntoPPM(GLFWwindow* window) {
@@ -37,11 +27,6 @@ void captureIntoPPM(GLFWwindow* window) {
     glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
     capturer.Dump("Assignment0-ss", buffer_width, buffer_height);
 }
-
-void handleDebugShader(ShaderProgram& shaderProgram) {
-    shaderProgram.setBool("isDebug", isInDebugMode);
-}
-
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -82,7 +67,7 @@ int main() {
 
     InputHandler inputHandler(window);
     inputHandler.AddKeyCallback(GLFW_KEY_ESCAPE, closeWindow);
-    inputHandler.AddKeyCallback(GLFW_KEY_B, toggleDebugMode);
+    debug.ApplyToInputHandler(inputHandler);
     inputHandler.AddKeyCallback(GLFW_KEY_P, captureIntoPPM);
 
 	ShaderProgram shaderProgram("shaders/default.vert", "shaders/default.frag");
@@ -132,7 +117,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderProgram.Activate();
-        handleDebugShader(shaderProgram);
+        debug.HandleDebugShader(shaderProgram);
 
         camera.Apply(shaderProgram);
 
