@@ -15,11 +15,14 @@
 #include "debug/DebugFilter.hpp"
 
 // Define rotation constants
-#define SUN_DAILY_REVOLVE_ANGLE 360.0f/27
-#define EARTH_DAILY_REVOLVE_ANGLE 360.0f/1
-#define EARTH_DAILY_ORBIT_SUN_ANGLE 360.f/365
-#define MOON_DAILY_REVOLVE_ANGLE 360.0f/28
-#define MOON_DAILY_ORBIT_EARTH_ANGLE 360.0f/28
+#define SUN_DAILY_REVOLVE_ANGLE 360.0f/27.0f
+#define EARTH_DAILY_REVOLVE_ANGLE 360.0f/1.0f
+#define EARTH_DAILY_ORBIT_SUN_ANGLE 360.0f/365.0f
+#define MOON_DAILY_REVOLVE_ANGLE 360.0f/28.0f
+#define MOON_DAILY_ORBIT_EARTH_ANGLE 360.0f/28.0f
+
+#define SUN_EARTH_DISTANCE 40
+#define EARTH_MOON_DISTANCE 12
 
 DebugFilter debug;
 PPMCapture capturer;
@@ -43,18 +46,35 @@ GLfloat get_sun_rotate_angle_around_itself(float day) {
 	return day * SUN_DAILY_REVOLVE_ANGLE;
 }
 GLfloat get_earth_rotate_angle_around_sun(float day) {
-	return day * EARTH_DAILY_ORBIT_SUN_ANGLE;
+	return -day * EARTH_DAILY_ORBIT_SUN_ANGLE;
 }
 GLfloat get_earth_rotate_angle_around_itself(float day) {
 	return day * EARTH_DAILY_REVOLVE_ANGLE;
 }
 GLfloat get_moon_rotate_angle_around_earth(float day) {
-	return day * MOON_DAILY_ORBIT_EARTH_ANGLE;
+	return -day * MOON_DAILY_ORBIT_EARTH_ANGLE;
 }
 GLfloat get_moon_rotate_angle_around_itself(float day) {
 	return day * MOON_DAILY_REVOLVE_ANGLE;
 }
 
+glm::vec3 get_earth_pos_today(Cube sun, float day) {
+	glm::vec3 sunPos = sun.getPosition();
+	GLfloat earthSunAngle = glm::radians(get_earth_rotate_angle_around_sun(day));
+
+	GLfloat x = (glm::cos(earthSunAngle) * SUN_EARTH_DISTANCE) + sunPos.x;
+	GLfloat z = (glm::sin(earthSunAngle) * SUN_EARTH_DISTANCE) + sunPos.z;
+	return glm::vec3(x, sunPos.y, z);
+}
+
+glm::vec3 get_moon_pos_today(Cube earth, float day) {
+	glm::vec3 earthPos = earth.getPosition();
+	GLfloat moonEarthAngle = glm::radians(get_moon_rotate_angle_around_earth(day));
+
+	GLfloat x = (glm::cos(moonEarthAngle) * EARTH_MOON_DISTANCE) + earthPos.x;
+	GLfloat z = (glm::sin(moonEarthAngle) * EARTH_MOON_DISTANCE) + earthPos.z;
+	return glm::vec3(x, earthPos.y, z);
+}
 
 int main() {
 	glfwInit();
@@ -117,7 +137,7 @@ int main() {
 	glm::vec3 sunPos = sun.getPosition();
 
     Cube earth(
-        glm::vec3(sunPos.x + 40, sunPos.y, sunPos.z),
+        glm::vec3(sunPos.x + SUN_EARTH_DISTANCE, sunPos.y, sunPos.z),
         8,
         -23.4,
         glm::vec3(0, 0, 1)
@@ -125,7 +145,7 @@ int main() {
 	glm::vec3 earthPos = earth.getPosition();
 
 	Cube moon(
-		glm::vec3(earthPos.x + 12, earthPos.y, earthPos.z),
+		glm::vec3(earthPos.x + EARTH_MOON_DISTANCE, earthPos.y, earthPos.z),
 		4,
 		0,
 		glm::vec3(0, 0, 0)
@@ -134,7 +154,7 @@ int main() {
 	Camera camera(glm::vec3(60, 30, 80), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
     camera.LookAt(sun.getPosition());
 
-	float day = 8.7;
+	float day = 0;
 
 	while(!glfwWindowShouldClose(window)) {
 		inputHandler.ProcessInput();
@@ -147,16 +167,20 @@ int main() {
 
         camera.Apply(shaderProgram);
 
+		std::cout << "Today is: " << day << std::endl;
+
         vao.Bind();
 
 		sun.RevolveOnAxis(get_sun_rotate_angle_around_itself(day));
 		sun.UpdateShader(shaderProgram);
         sun.Render();
 
+		earth.MoveTo(get_earth_pos_today(sun, day));
 		earth.RevolveOnAxis(get_earth_rotate_angle_around_itself(day));
         earth.UpdateShader(shaderProgram);
 		earth.Render();
 
+		moon.MoveTo(get_moon_pos_today(earth, day));
 		moon.RevolveOnAxis(get_moon_rotate_angle_around_itself(day));
 		moon.UpdateShader(shaderProgram);
 		moon.Render();
