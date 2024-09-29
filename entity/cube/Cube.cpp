@@ -97,7 +97,6 @@ glm::vec3 Cube::getPosition() {
 
 void Cube::RevolveOnAxis(GLfloat angle) {
     this->revolveAngle = angle;
-    this->ApplyTransformations();
 }
 
 void Cube::MoveTo(glm::vec3 newPosition) {
@@ -105,6 +104,7 @@ void Cube::MoveTo(glm::vec3 newPosition) {
 }
 
 void Cube::UpdateShader(ShaderProgram& shaderProgram) {
+    this->ApplyTransformations();
     shaderProgram.setMat4("model", this->model);
 }
 
@@ -116,7 +116,6 @@ void Cube::setPosition(glm::vec3 newPosition) {
     this->position.x = newPosition.x;
     this->position.y = newPosition.y;
     this->position.z = newPosition.z;
-    this->ApplyTransformations();
 }
 
 void Cube::ApplyTransformations() {
