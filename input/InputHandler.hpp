@@ -6,16 +6,17 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <map>
+#include <functional>
 
 class InputHandler {
     public:
         InputHandler(GLFWwindow* window);
-        void AddKeyCallback(int key, void (*func)(GLFWwindow*));
+        void AddKeyCallback(int key, std::function<void(GLFWwindow*)> func);
         void ProcessInput();
 
     private:
         GLFWwindow* window;
-        std::map<int, void (*)(GLFWwindow*)> keyFuncMap;
+        std::map<int, std::function<void(GLFWwindow*)>> keyFuncMap;
         std::map<int, bool> keyPressedMap;
 };
 

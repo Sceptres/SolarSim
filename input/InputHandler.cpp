@@ -4,7 +4,7 @@ InputHandler::InputHandler(GLFWwindow* window) {
     this->window = window;
 }
 
-void InputHandler::AddKeyCallback(int key, void (*func)(GLFWwindow*)) {
+void InputHandler::AddKeyCallback(int key, std::function<void(GLFWwindow*)> func) {
     this->keyFuncMap[key] = func;
     this->keyPressedMap[key] = false;
 }
