@@ -15,7 +15,7 @@ class Cube {
         static VBO InstantiateVBO();
         static EBO InstantiateEBO();
         static void LinkAttribs(VAO& vao);
-        Cube(glm::vec3 initPosition);
+        Cube(glm::vec3 initPosition, GLfloat scale, GLfloat angle, glm::vec3 rotateAxis);
         glm::vec3 getPosition();
         void MoveTo(glm::vec3 newPosition);
         void UpdateShader(ShaderProgram& shaderProgram);
@@ -23,10 +23,14 @@ class Cube {
 
     private:
         glm::vec3 position;
+        GLfloat scale;
+        GLfloat angle;
+        glm::vec3 rotateAxis;
         glm::mat4 model;
         static GLfloat verts[];
         static GLuint indices[];
         void setPosition(glm::vec3 newPosition);
+        void ApplyTransformations();
 };
 
 #endif

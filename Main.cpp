@@ -97,10 +97,31 @@ int main() {
 	vbo.Unbind();
 	ebo.Unbind();
 
-    Cube cube(glm::vec3(0, 0, 0));
+    Cube sun(
+        glm::vec3(0, 0, 0),
+        20,
+        0,
+        glm::vec3(0, 0, 0)
+    );
+	glm::vec3 sunPos = sun.getPosition();
 
-	Camera camera(glm::vec3(-6, 5, 4), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
-    camera.LookAt(cube.getPosition());
+    Cube earth(
+        glm::vec3(sunPos.x + 40, sunPos.y, sunPos.z),
+        8,
+        -23.4,
+        glm::vec3(0, 0, 1)
+    );
+	glm::vec3 earthPos = earth.getPosition();
+
+	Cube moon(
+		glm::vec3(earthPos.x + 12, earthPos.y, earthPos.z),
+		4,
+		0,
+		glm::vec3(0, 0, 0)
+	);
+
+	Camera camera(glm::vec3(0, 0, 120), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
+    camera.LookAt(sun.getPosition());
 
 	while(!glfwWindowShouldClose(window)) {
 		inputHandler.ProcessInput();
@@ -109,15 +130,23 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shaderProgram.Activate();
-
         handleDebugShader(shaderProgram);
-		cube.UpdateShader(shaderProgram);
-		camera.Apply(shaderProgram);
 
-		vao.Bind();
-		cube.Render();
+        camera.Apply(shaderProgram);
+
+        vao.Bind();
+
+		sun.UpdateShader(shaderProgram);
+        sun.Render();
+        earth.UpdateShader(shaderProgram);
+		earth.Render();
+		moon.UpdateShader(shaderProgram);
+		moon.Render();
+
+        vao.Unbind();
+
 		glfwSwapBuffers(window);
-		
+
 		glfwPollEvents();
 	}
 
