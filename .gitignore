@@ -3,6 +3,7 @@
 **/.DS_STORE
 
 *.ppm
+*.mp4
 
 # Prerequisites
 *.d
