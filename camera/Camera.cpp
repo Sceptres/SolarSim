@@ -5,7 +5,7 @@ Camera::Camera(const glm::vec3 startPos, GLfloat fov, GLfloat aspectRatio, GLflo
     this->target = glm::vec3(0);
     this->up = glm::vec3(0);
     this->UpdateStates(this->position, this->target);
-    this->projection = glm::perspective(fov, aspectRatio, nearPlaneDistance, farPlaneDistance);
+    this->projection = glm::perspective(glm::radians(fov), aspectRatio, nearPlaneDistance, farPlaneDistance);
 }
 
 void Camera::Apply(ShaderProgram& shaderProgram) {
