@@ -87,11 +87,17 @@ Cube::Cube(glm::vec3 initPosition, GLfloat scale, GLfloat angle, glm::vec3 rotat
     this->scale = scale/2;
     this->angle = angle;
     this->rotateAxis = rotateAxis;
+    this->revolveAxis = glm::vec3(0, 1, 0);
     this->setPosition(initPosition);
 }
 
 glm::vec3 Cube::getPosition() {
     return this->position;
+}
+
+void Cube::RevolveOnAxis(GLfloat angle) {
+    this->revolveAngle = angle;
+    this->ApplyTransformations();
 }
 
 void Cube::MoveTo(glm::vec3 newPosition) {
@@ -119,6 +125,8 @@ void Cube::ApplyTransformations() {
 
     if(this->rotateAxis != glm::vec3(0, 0, 0))
         this->model = glm::rotate(this->model, glm::radians(this->angle), this->rotateAxis);
+
+    this->model = glm::rotate(this->model, glm::radians(this->revolveAngle), this->revolveAxis);
     
     this->model = glm::scale(this->model, glm::vec3(this->scale));
 }

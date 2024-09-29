@@ -20,12 +20,15 @@ class Cube {
         void MoveTo(glm::vec3 newPosition);
         void UpdateShader(ShaderProgram& shaderProgram);
         void Render();
+        void RevolveOnAxis(GLfloat angle);
 
     private:
         glm::vec3 position;
         GLfloat scale;
         GLfloat angle;
         glm::vec3 rotateAxis;
+        GLfloat revolveAngle;
+        glm::vec3 revolveAxis;
         glm::mat4 model;
         static GLfloat verts[];
         static GLuint indices[];

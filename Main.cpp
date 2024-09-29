@@ -14,6 +14,13 @@
 #include "input/InputHandler.hpp"
 #include "debug/DebugFilter.hpp"
 
+// Define rotation constants
+#define SUN_DAILY_REVOLVE_ANGLE 360.0f/27
+#define EARTH_DAILY_REVOLVE_ANGLE 360.0f/1
+#define EARTH_DAILY_ORBIT_SUN_ANGLE 360.f/365
+#define MOON_DAILY_REVOLVE_ANGLE 360.0f/28
+#define MOON_DAILY_ORBIT_EARTH_ANGLE 360.0f/28
+
 DebugFilter debug;
 PPMCapture capturer;
 
@@ -31,6 +38,23 @@ void captureIntoPPM(GLFWwindow* window) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
+
+GLfloat get_sun_rotate_angle_around_itself(float day) {
+	return day * SUN_DAILY_REVOLVE_ANGLE;
+}
+GLfloat get_earth_rotate_angle_around_sun(float day) {
+	return day * EARTH_DAILY_ORBIT_SUN_ANGLE;
+}
+GLfloat get_earth_rotate_angle_around_itself(float day) {
+	return day * EARTH_DAILY_REVOLVE_ANGLE;
+}
+GLfloat get_moon_rotate_angle_around_earth(float day) {
+	return day * MOON_DAILY_ORBIT_EARTH_ANGLE;
+}
+GLfloat get_moon_rotate_angle_around_itself(float day) {
+	return day * MOON_DAILY_REVOLVE_ANGLE;
+}
+
 
 int main() {
 	glfwInit();
@@ -107,8 +131,10 @@ int main() {
 		glm::vec3(0, 0, 0)
 	);
 
-	Camera camera(glm::vec3(-120, 100, 80), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
+	Camera camera(glm::vec3(60, 30, 80), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
     camera.LookAt(sun.getPosition());
+
+	float day = 8.7;
 
 	while(!glfwWindowShouldClose(window)) {
 		inputHandler.ProcessInput();
@@ -123,10 +149,15 @@ int main() {
 
         vao.Bind();
 
+		sun.RevolveOnAxis(get_sun_rotate_angle_around_itself(day));
 		sun.UpdateShader(shaderProgram);
         sun.Render();
+
+		earth.RevolveOnAxis(get_earth_rotate_angle_around_itself(day));
         earth.UpdateShader(shaderProgram);
 		earth.Render();
+
+		moon.RevolveOnAxis(get_moon_rotate_angle_around_itself(day));
 		moon.UpdateShader(shaderProgram);
 		moon.Render();
 
