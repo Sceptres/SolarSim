@@ -13,6 +13,7 @@
 #include "entity/cube/Cube.hpp"
 #include "input/InputHandler.hpp"
 #include "debug/DebugFilter.hpp"
+#include "window/Window.hpp"
 
 // Define rotation constants
 #define SUN_DAILY_REVOLVE_ANGLE 360.0f/27.0f
@@ -26,10 +27,6 @@
 
 DebugFilter debug;
 PPMCapture capturer;
-
-void closeWindow(GLFWwindow* window) {
-    glfwSetWindowShouldClose(window, true);
-}
 
 void captureIntoPPM(GLFWwindow* window) {
     std::cout << "Capture Window " << capturer.getId() << std::endl;
@@ -77,128 +74,107 @@ glm::vec3 get_moon_pos_today(Cube earth, float day) {
 }
 
 int main() {
-	glfwInit();
+	try {
+		glfwInit();
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
-	#ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    #endif
+		Window window(1024, 576, false, "Solar Simulation");
+		window.Launch();
 
-	unsigned int width = 1024;
-	unsigned int height = 576;
+		InputHandler inputHandler(window.getGLWindow());
+		window.ApplyCloseWindowToInputHandler(inputHandler);
+		debug.ApplyToInputHandler(inputHandler);
+		inputHandler.AddKeyCallback(GLFW_KEY_P, captureIntoPPM);
 
-	GLFWwindow* window = glfwCreateWindow(width, height, "Solar Simulation", NULL, NULL);
-	if(window == nullptr) {
-		std::cout << "Failed to create a window" << std::endl;
+		ShaderProgram shaderProgram("shaders/default.vert", "shaders/default.frag");
+
+		VAO vao;
+		vao.Bind();
+
+		VBO vbo = Cube::InstantiateVBO();
+		EBO ebo = Cube::InstantiateEBO();
+
+		Cube::LinkAttribs(vao);
+
+		vao.Unbind();
+		vbo.Unbind();
+		ebo.Unbind();
+
+		Cube sun(
+			glm::vec3(0, 0, 0),
+			20,
+			0,
+			glm::vec3(0, 0, 0)
+		);
+		glm::vec3 sunPos = sun.getPosition();
+
+		Cube earth(
+			glm::vec3(sunPos.x + SUN_EARTH_DISTANCE, sunPos.y, sunPos.z),
+			8,
+			-23.4,
+			glm::vec3(0, 0, 1)
+		);
+		glm::vec3 earthPos = earth.getPosition();
+
+		Cube moon(
+			glm::vec3(earthPos.x + EARTH_MOON_DISTANCE, earthPos.y, earthPos.z),
+			4,
+			0,
+			glm::vec3(0, 0, 0)
+		);
+
+		Camera camera(glm::vec3(30, 20, 90), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
+
+		float day = 0, inc = 1.0f/24;
+
+		while(!window.ShouldClose()) {
+			inputHandler.ProcessInput();
+
+			glClearColor(0.3, 0.4, 0.5, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			shaderProgram.Activate();
+			debug.HandleDebugShader(shaderProgram);
+
+			camera.LookAt(sun.getPosition());
+			camera.Apply(shaderProgram);
+
+			std::cout << "Today is: " << day << std::endl;
+
+			vao.Bind();
+
+			sun.RevolveOnAxis(get_sun_rotate_angle_around_itself(day));
+			sun.UpdateShader(shaderProgram);
+			sun.Render();
+
+			earth.MoveTo(get_earth_pos_today(sun, day));
+			earth.RevolveOnAxis(get_earth_rotate_angle_around_itself(day));
+			earth.UpdateShader(shaderProgram);
+			earth.Render();
+
+			moon.MoveTo(get_moon_pos_today(earth, day));
+			moon.RevolveOnAxis(get_moon_rotate_angle_around_itself(day));
+			moon.UpdateShader(shaderProgram);
+			moon.Render();
+
+			vao.Unbind();
+
+			day += inc;
+
+			window.SwapBuffers();
+
+			glfwPollEvents();
+		}
+
+		vao.Delete();
+		vbo.Delete();
+		ebo.Delete();
+		shaderProgram.Delete();
+		glfwTerminate();
+
+		return 0;
+	} catch(const std::exception& e) {
+		std::cout << e.what() << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);
-
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	} 
-
-	glViewport(0, 0, width, height);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
-
-    InputHandler inputHandler(window);
-    inputHandler.AddKeyCallback(GLFW_KEY_ESCAPE, closeWindow);
-    debug.ApplyToInputHandler(inputHandler);
-    inputHandler.AddKeyCallback(GLFW_KEY_P, captureIntoPPM);
-
-	ShaderProgram shaderProgram("shaders/default.vert", "shaders/default.frag");
-
-	VAO vao;
-	vao.Bind();
-
-	VBO vbo = Cube::InstantiateVBO();
-	EBO ebo = Cube::InstantiateEBO();
-
-    Cube::LinkAttribs(vao);
-
-	vao.Unbind();
-	vbo.Unbind();
-	ebo.Unbind();
-
-    Cube sun(
-        glm::vec3(0, 0, 0),
-        20,
-        0,
-        glm::vec3(0, 0, 0)
-    );
-	glm::vec3 sunPos = sun.getPosition();
-
-    Cube earth(
-        glm::vec3(sunPos.x + SUN_EARTH_DISTANCE, sunPos.y, sunPos.z),
-        8,
-        -23.4,
-        glm::vec3(0, 0, 1)
-    );
-	glm::vec3 earthPos = earth.getPosition();
-
-	Cube moon(
-		glm::vec3(earthPos.x + EARTH_MOON_DISTANCE, earthPos.y, earthPos.z),
-		4,
-		0,
-		glm::vec3(0, 0, 0)
-	);
-
-	Camera camera(glm::vec3(30, 20, 90), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
-
-	float day = 0, inc = 1.0f/24;
-
-	while(!glfwWindowShouldClose(window)) {
-		inputHandler.ProcessInput();
-
-		glClearColor(0.3, 0.4, 0.5, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		shaderProgram.Activate();
-        debug.HandleDebugShader(shaderProgram);
-
-		camera.LookAt(sun.getPosition());
-        camera.Apply(shaderProgram);
-
-		std::cout << "Today is: " << day << std::endl;
-
-        vao.Bind();
-
-		sun.RevolveOnAxis(get_sun_rotate_angle_around_itself(day));
-		sun.UpdateShader(shaderProgram);
-        sun.Render();
-
-		earth.MoveTo(get_earth_pos_today(sun, day));
-		earth.RevolveOnAxis(get_earth_rotate_angle_around_itself(day));
-        earth.UpdateShader(shaderProgram);
-		earth.Render();
-
-		moon.MoveTo(get_moon_pos_today(earth, day));
-		moon.RevolveOnAxis(get_moon_rotate_angle_around_itself(day));
-		moon.UpdateShader(shaderProgram);
-		moon.Render();
-
-        vao.Unbind();
-
-		day += inc;
-
-		glfwSwapBuffers(window);
-
-		glfwPollEvents();
-	}
-
-	vao.Delete();
-	vbo.Delete();
-	ebo.Delete();
-	shaderProgram.Delete();
-	glfwTerminate();
-
-	return 0;
 }
