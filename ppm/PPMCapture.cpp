@@ -1,4 +1,4 @@
-#include "PPMCapture.h"
+#include "PPMCapture.hpp"
 
 PPMCapture::PPMCapture() {
     this->idCounter = 0;
@@ -29,4 +29,17 @@ void PPMCapture::Dump(std::string prefix, unsigned int width, unsigned int heigh
 
 unsigned int PPMCapture::getId() {
     return this->idCounter;
+}
+
+void PPMCapture::ApplyToInputHandler(InputHandler& inputHandler) {
+    inputHandler.AddKeyCallback(GLFW_KEY_P, [this](GLFWwindow* window) {
+        this->Capture(window);
+    });
+}
+
+void PPMCapture::Capture(GLFWwindow* window) {
+    std::cout << "Capture Window " << this->idCounter << std::endl;
+    int buffer_width, buffer_height;
+    glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
+    this->Dump("Assignment0-ss", buffer_width, buffer_height);
 }

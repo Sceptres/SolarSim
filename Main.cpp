@@ -4,7 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-#include "ppm/PPMCapture.h"
+#include "ppm/PPMCapture.hpp"
 #include "buffer/VBO/VBO.hpp"
 #include "buffer/EBO/EBO.hpp"
 #include "array/VAO.hpp"
@@ -27,13 +27,6 @@
 
 DebugFilter debug;
 PPMCapture capturer;
-
-void captureIntoPPM(GLFWwindow* window) {
-    std::cout << "Capture Window " << capturer.getId() << std::endl;
-    int buffer_width, buffer_height;
-    glfwGetFramebufferSize(window, &buffer_width, &buffer_height);
-    capturer.Dump("Assignment0-ss", buffer_width, buffer_height);
-}
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -83,7 +76,7 @@ int main() {
 		InputHandler inputHandler(window.getGLWindow());
 		window.ApplyCloseWindowToInputHandler(inputHandler);
 		debug.ApplyToInputHandler(inputHandler);
-		inputHandler.AddKeyCallback(GLFW_KEY_P, captureIntoPPM);
+		capturer.ApplyToInputHandler(inputHandler);
 
 		ShaderProgram shaderProgram("shaders/default.vert", "shaders/default.frag");
 
