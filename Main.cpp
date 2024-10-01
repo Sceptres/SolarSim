@@ -28,10 +28,6 @@
 DebugFilter debug;
 PPMCapture capturer;
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
-
 GLfloat get_sun_rotate_angle_around_itself(float day) {
 	return day * SUN_DAILY_REVOLVE_ANGLE;
 }
