@@ -13,6 +13,7 @@
 class Window {
     public:
         Window(unsigned int width, unsigned int height, bool isResizable, std::string title);
+        ~Window();
         GLFWwindow* getGLWindow();
         bool ShouldClose();
         void Launch();

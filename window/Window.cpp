@@ -18,6 +18,11 @@ Window::Window(unsigned int width, unsigned int height, bool isResizable, std::s
     }
 }
 
+Window::~Window() {
+    if(this->window != nullptr)
+        glfwDestroyWindow(this->window);
+}
+
 GLFWwindow* Window::getGLWindow() {
     return this->window;
 }
