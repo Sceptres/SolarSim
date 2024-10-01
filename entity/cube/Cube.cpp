@@ -81,51 +81,20 @@ void Cube::LinkAttribs(VAO& vao) {
 	vao.LinkBuffers(1, stride, (void*) (3 * sizeof(float)));
 }
 
-Cube::Cube(glm::vec3 initPosition, GLfloat scale, GLfloat angle, glm::vec3 rotateAxis) {
-    this->position = glm::vec3(0.0);
-    this->model = glm::mat4(1.0f);
-    this->scale = scale/2;
-    this->angle = angle;
-    this->rotateAxis = rotateAxis;
+Cube::Cube(glm::vec3 initPosition, GLfloat scale, GLfloat angle, glm::vec3 rotateAxis) : 
+    Entity(initPosition, scale, angle, rotateAxis) {
     this->revolveAxis = glm::vec3(0, 1, 0);
-    this->setPosition(initPosition);
-}
-
-glm::vec3 Cube::getPosition() {
-    return this->position;
 }
 
 void Cube::RevolveOnAxis(GLfloat angle) {
     this->revolveAngle = angle;
 }
 
-void Cube::MoveTo(glm::vec3 newPosition) {
-    this->setPosition(newPosition);
-}
-
-void Cube::UpdateShader(ShaderProgram& shaderProgram) {
-    this->ApplyTransformations();
-    shaderProgram.setMat4("model", this->model);
-}
-
-void Cube::Render() {
+void Cube::Draw() const {
     glDrawElements(GL_TRIANGLES, sizeof(Cube::indices) / sizeof(GLuint), GL_UNSIGNED_INT, 0);
 }
 
-void Cube::setPosition(glm::vec3 newPosition) {
-    this->position.x = newPosition.x;
-    this->position.y = newPosition.y;
-    this->position.z = newPosition.z;
-}
-
 void Cube::ApplyTransformations() {
-    this->model = glm::mat4(1.0f);    
-    this->model = glm::translate(this->model, this->position);
-
-    if(this->rotateAxis != glm::vec3(0, 0, 0))
-        this->model = glm::rotate(this->model, glm::radians(this->angle), this->rotateAxis);
-
-    this->model = glm::rotate(this->model, glm::radians(this->revolveAngle), this->revolveAxis);
-    
-    this->model = glm::scale(this->model, glm::vec3(this->scale));
+    Entity::ApplyTransformations();
+    Entity::model = glm::rotate(Entity::model, glm::radians(this->revolveAngle), this->revolveAxis);
 }

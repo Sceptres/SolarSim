@@ -136,18 +136,15 @@ int main() {
 			vao.Bind();
 
 			sun.RevolveOnAxis(get_sun_rotate_angle_around_itself(day));
-			sun.UpdateShader(shaderProgram);
-			sun.Render();
+			sun.Render(shaderProgram);
 
 			earth.MoveTo(get_earth_pos_today(sun, day));
 			earth.RevolveOnAxis(get_earth_rotate_angle_around_itself(day));
-			earth.UpdateShader(shaderProgram);
-			earth.Render();
+			earth.Render(shaderProgram);
 
 			moon.MoveTo(get_moon_pos_today(earth, day));
 			moon.RevolveOnAxis(get_moon_rotate_angle_around_itself(day));
-			moon.UpdateShader(shaderProgram);
-			moon.Render();
+			moon.Render(shaderProgram);
 
 			vao.Unbind();
 
