@@ -9,6 +9,7 @@
 #include "exception/WindoNotCreatedException.hpp"
 #include "exception/GladInitFailedException.hpp"
 #include "../input/InputHandler.hpp"
+#include "../color/Color.hpp"
 
 class Window {
     public:
@@ -19,6 +20,7 @@ class Window {
         void Launch();
         void ApplyCloseWindowToInputHandler(InputHandler& inputHandler); 
         void SwapBuffers();
+        void ClearColor(Color& color);
 
     private:
         GLFWwindow* window;

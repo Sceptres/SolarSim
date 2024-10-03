@@ -14,6 +14,7 @@
 #include "input/InputHandler.hpp"
 #include "debug/DebugFilter.hpp"
 #include "window/Window.hpp"
+#include "color/Color.hpp"
 
 // Define rotation constants
 #define SUN_DAILY_REVOLVE_ANGLE 360.0f/27.0f
@@ -113,13 +114,14 @@ int main() {
 
 		Camera camera(glm::vec3(30, 20, 90), 45.0f, 16.0/9.0, 0.1f, 1000.0f);
 
+		Color backgroundColor(0.3, 0.4, 0.5, 1.0f);
+
 		float day = 0, inc = 1.0f/24;
 
 		while(!window.ShouldClose()) {
 			inputHandler.ProcessInput();
 
-			glClearColor(0.3, 0.4, 0.5, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			window.ClearColor(backgroundColor);
 
 			shaderProgram.Activate();
 			debug.HandleDebugShader(shaderProgram);
