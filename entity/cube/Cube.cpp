@@ -1,42 +1,49 @@
 #include "Cube.hpp"
 
+Color green(0.0f, 1.0f, 0.0f);
+Color red(1.0f, 0.0f, 0.0f);
+Color blue(0.0f, 0.0f, 1.0f);
+Color aqua(0.0f, 1.0f, 1.0f);
+Color yellow(1.0f, 1.0f, 0.0f);
+Color futchsia(1.0f, 0.0f, 1.0f);
+
 GLfloat Cube::verts[] = {
     // Positions            // Colors (R, G, B)
     // Back face (green)
-    -1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 0
-    1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 1
-    1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 2
-    -1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 0.0f,  // Vertex 3
+    -1.0f, -1.0f, -1.0f,   green.r, green.g, green.b,  // Vertex 0
+    1.0f, -1.0f, -1.0f,   green.r, green.g, green.b,  // Vertex 1
+    1.0f,  1.0f, -1.0f,   green.r, green.g, green.b,  // Vertex 2
+    -1.0f,  1.0f, -1.0f,   green.r, green.g, green.b,  // Vertex 3
 
     // Front face (red)
-    -1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 4
-    1.0f, -1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 5
-    1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 6
-    -1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 0.0f,  // Vertex 7
+    -1.0f, -1.0f,  1.0f,   red.r, red.g, red.b,  // Vertex 4
+    1.0f, -1.0f,  1.0f,   red.r, red.g, red.b,  // Vertex 5
+    1.0f,  1.0f,  1.0f,   red.r, red.g, red.b,  // Vertex 6
+    -1.0f,  1.0f,  1.0f,   red.r, red.g, red.b,  // Vertex 7
 
     // Left face (blue)
-    -1.0f, -1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 8
-    -1.0f, -1.0f, -1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 9
-    -1.0f,  1.0f, -1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 10
-    -1.0f,  1.0f,  1.0f,   0.0f, 0.0f, 1.0f,  // Vertex 11
+    -1.0f, -1.0f,  1.0f,   blue.r, blue.g, blue.b,  // Vertex 8
+    -1.0f, -1.0f, -1.0f,   blue.r, blue.g, blue.b,  // Vertex 9
+    -1.0f,  1.0f, -1.0f,   blue.r, blue.g, blue.b,  // Vertex 10
+    -1.0f,  1.0f,  1.0f,   blue.r, blue.g, blue.b,  // Vertex 11
 
     // Right face (aqua)
-    1.0f, -1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 12
-    1.0f, -1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 13
-    1.0f,  1.0f,  1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 14
-    1.0f,  1.0f, -1.0f,   0.0f, 1.0f, 1.0f,  // Vertex 15
+    1.0f, -1.0f, -1.0f,   aqua.r, aqua.g, aqua.b,  // Vertex 12
+    1.0f, -1.0f,  1.0f,   aqua.r, aqua.g, aqua.b,  // Vertex 13
+    1.0f,  1.0f,  1.0f,   aqua.r, aqua.g, aqua.b,  // Vertex 14
+    1.0f,  1.0f, -1.0f,   aqua.r, aqua.g, aqua.b,  // Vertex 15
 
     // Bottom face (yellow)
-    -1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 16
-    1.0f, -1.0f,  1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 17
-    1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 18
-    -1.0f, -1.0f, -1.0f,   1.0f, 1.0f, 0.0f,  // Vertex 19
+    -1.0f, -1.0f,  1.0f,   yellow.r, yellow.g, yellow.b,  // Vertex 16
+    1.0f, -1.0f,  1.0f,   yellow.r, yellow.g, yellow.b,  // Vertex 17
+    1.0f, -1.0f, -1.0f,   yellow.r, yellow.g, yellow.b,  // Vertex 18
+    -1.0f, -1.0f, -1.0f,   yellow.r, yellow.g, yellow.b,  // Vertex 19
 
     // Top face (futchsia)
-    -1.0f,  1.0f, -1.0f,   1.0f, 0.0f, 1.0f,  // Vertex 20
-    1.0f,  1.0f, -1.0f,   1.0f, 0.0f, 1.0f,  // Vertex 21
-    1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 1.0f,  // Vertex 22
-    -1.0f,  1.0f,  1.0f,   1.0f, 0.0f, 1.0f   // Vertex 23
+    -1.0f,  1.0f, -1.0f,   futchsia.r, futchsia.g, futchsia.b,  // Vertex 20
+    1.0f,  1.0f, -1.0f,   futchsia.r, futchsia.g, futchsia.b,  // Vertex 21
+    1.0f,  1.0f,  1.0f,   futchsia.r, futchsia.g, futchsia.b,  // Vertex 22
+    -1.0f,  1.0f,  1.0f,   futchsia.r, futchsia.g, futchsia.b   // Vertex 23
 };
 
 GLuint Cube::indices[] = {

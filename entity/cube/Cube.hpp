@@ -10,6 +10,7 @@
 #include "../../array/VAO.hpp"
 #include "../../shader/ShaderProgram.hpp"
 #include "../Entity.hpp"
+#include "../../color/Color.hpp"
 
 class Cube : public Entity {
     public:
