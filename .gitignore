@@ -4,6 +4,8 @@
 glad.c
 *.ppm
 *.mp4
+/obj
+/bin
 
 # Prerequisites
 *.d
@@ -15,7 +17,7 @@ glad.c
 *.obj
 
 # Compiled Main file
-Main
+SolarSim
 
 # Precompiled Headers
 *.gch
