@@ -25,7 +25,7 @@ LIBDIR = # Lib dir that contains glfw3, glad, and GLM library files
 ```
 
 ## How to run
-To run this project, execute the `run.sh` shell script. This will build and start the application. You can also build the application yourself by running in the root directory of the project.
+To run this project, execute the `run.sh` shell script. This will build and start the application. You can also build the application yourself by running `make` command in the root directory of the project.
 ``` sh
 make
 ```
