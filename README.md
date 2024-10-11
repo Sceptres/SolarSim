@@ -5,9 +5,15 @@ This project simulates a solar system consisting of a sun, earth, and moon repre
 2. GLAD
 3. GLM
 
+The app contains the following keyboard controls:
+1. Press `p` on your keyboard to capture the screen into a ppm image
+2. Press `b` to render the world in debug mode
+3. Press `esc` to close the window
+
 Below is a video displaying how the project runs:
 
 [![YouTube](http://i.ytimg.com/vi/Rwsw86FiF3Q/hqdefault.jpg)](https://www.youtube.com/watch?v=Rwsw86FiF3Q)
+
 
 ## Setup
 To setup the project, you need to setup the GLFW3, GLAD, and GLM libraries. Follow the steps in the following link to setup GLFW3, GLAD, and other system specific dependencies, https://learnopengl.com/Getting-started/Creating-a-window. Furthermore, the `glad.c` file must be placed in the `src/` folder. You can use the official glm github page to install and setup the library https://github.com/g-truc/glm. 
