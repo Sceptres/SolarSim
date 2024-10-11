@@ -7,7 +7,7 @@ This project simulates a solar system consisting of a sun, earth, and moon repre
 
 Below is a video displaying how the project runs:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Rwsw86FiF3Q?si=QWM9CCtf0KcnTCW3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![YouTube](http://i.ytimg.com/vi/Rwsw86FiF3Q/hqdefault.jpg)](https://www.youtube.com/watch?v=Rwsw86FiF3Q)
 
 ## Setup
 To setup the project, you need to setup the GLFW3, GLAD, and GLM libraries. Follow the steps in the following link to setup GLFW3, GLAD, and other system specific dependencies, https://learnopengl.com/Getting-started/Creating-a-window. Furthermore, the `glad.c` file must be placed in the `src/` folder. You can use the official glm github page to install and setup the library https://github.com/g-truc/glm. 
